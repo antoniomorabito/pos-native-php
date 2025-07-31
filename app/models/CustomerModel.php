@@ -30,8 +30,8 @@ class CustomerModel extends Model {
                 WHERE s.status = 'completed'
                 GROUP BY c.id
                 ORDER BY total_spent DESC
-                LIMIT :limit";
-        $stmt = $this->db->query($sql, ['limit' => $limit]);
+                LIMIT " . (int)$limit;
+        $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
     }
     

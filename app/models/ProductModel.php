@@ -38,8 +38,8 @@ class ProductModel extends Model {
                 AND s.created_at >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
                 GROUP BY p.id
                 ORDER BY total_sold DESC
-                LIMIT :limit";
-        $stmt = $this->db->query($sql, ['limit' => $limit]);
+                LIMIT " . (int)$limit;
+        $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
     }
     

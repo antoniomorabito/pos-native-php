@@ -2,6 +2,9 @@
 // Load configuration
 require_once 'config/config.php';
 
+// Load helpers
+require_once 'core/helpers.php';
+
 // Autoloader
 spl_autoload_register(function($class) {
     // Check core directory

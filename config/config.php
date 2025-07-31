@@ -9,7 +9,7 @@ define('DB_NAME', 'dbkonterku');
 
 // Application Configuration
 define('APP_NAME', 'Konterku POS');
-define('BASE_URL', 'http://localhost/Pos/');
+define('BASE_URL', 'http://localhost:82/Pos/');
 define('ASSET_URL', BASE_URL . 'public/assets/');
 define('UPLOAD_URL', BASE_URL . 'public/uploads/');
 

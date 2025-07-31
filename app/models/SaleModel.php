@@ -18,8 +18,8 @@ class SaleModel extends Model {
                 LEFT JOIN customers c ON s.customer_id = c.id
                 WHERE s.status = 'completed'
                 ORDER BY s.created_at DESC
-                LIMIT :limit";
-        $stmt = $this->db->query($sql, ['limit' => $limit]);
+                LIMIT " . (int)$limit;
+        $stmt = $this->db->query($sql);
         return $stmt->fetchAll();
     }
     
@@ -28,11 +28,11 @@ class SaleModel extends Model {
                 COUNT(*) as count, 
                 SUM(total) as total
                 FROM {$this->table}
-                WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+                WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL " . (int)$days . " DAY)
                 AND status = 'completed'
                 GROUP BY DATE(created_at)
                 ORDER BY date ASC";
-        $stmt = $this->db->query($sql, ['days' => $days]);
+        $stmt = $this->db->query($sql);
         $results = $stmt->fetchAll();
         
         // Format for Chart.js
