@@ -93,13 +93,39 @@
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-user"></i> <?= $_SESSION['full_name'] ?>
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar me-2">
+                                <i class="fas fa-user-circle fa-lg"></i>
+                            </div>
+                            <div class="user-info">
+                                <div class="user-name"><?= $_SESSION['full_name'] ?></div>
+                                <small class="user-role text-light opacity-75"><?= ucfirst($_SESSION['user_role']) ?></small>
+                            </div>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>auth/profile">Profile</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="min-width: 200px;">
+                            <li>
+                                <div class="dropdown-header">
+                                    <strong><?= $_SESSION['full_name'] ?></strong>
+                                    <small class="text-muted d-block"><?= ucfirst($_SESSION['user_role']) ?></small>
+                                </div>
+                            </li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="<?= BASE_URL ?>auth/logout">Logout</a></li>
+                            <li>
+                                <a class="dropdown-item" href="<?= BASE_URL ?>auth/profile">
+                                    <i class="fas fa-user me-2"></i> My Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="<?= BASE_URL ?>settings">
+                                    <i class="fas fa-cog me-2"></i> Settings
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="<?= BASE_URL ?>auth/logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
