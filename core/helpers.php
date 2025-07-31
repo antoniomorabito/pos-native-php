@@ -63,29 +63,59 @@ function getPaymentMethodLabel($method) {
 }
 
 function uploadImage($file, $directory = 'products/', $allowedTypes = ['jpg', 'jpeg', 'png', 'gif']) {
-    if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
+    // Check if file was uploaded
+    if (!isset($file['tmp_name']) || empty($file['tmp_name']) || $file['error'] !== UPLOAD_ERR_OK) {
+        error_log("Upload error: " . ($file['error'] ?? 'No file'));
         return false;
     }
     
+    // Create upload directory if it doesn't exist
     $uploadDir = UPLOAD_PATH . $directory;
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
+        if (!mkdir($uploadDir, 0777, true)) {
+            error_log("Failed to create upload directory: " . $uploadDir);
+            return false;
+        }
     }
     
-    $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-    
-    if (!in_array($fileExtension, $allowedTypes)) {
+    // Check if directory is writable
+    if (!is_writable($uploadDir)) {
+        error_log("Upload directory is not writable: " . $uploadDir);
         return false;
     }
     
+    // Validate file extension
+    $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    if (!in_array($fileExtension, $allowedTypes)) {
+        error_log("Invalid file type: " . $fileExtension);
+        return false;
+    }
+    
+    // Validate file size (max 2MB)
+    if ($file['size'] > 2 * 1024 * 1024) {
+        error_log("File too large: " . $file['size'] . " bytes");
+        return false;
+    }
+    
+    // Validate if it's actually an image
+    $imageInfo = getimagesize($file['tmp_name']);
+    if ($imageInfo === false) {
+        error_log("File is not a valid image");
+        return false;
+    }
+    
+    // Generate unique filename
     $fileName = uniqid() . '_' . time() . '.' . $fileExtension;
     $uploadPath = $uploadDir . $fileName;
     
+    // Move uploaded file
     if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+        error_log("File uploaded successfully: " . $uploadPath);
         return $directory . $fileName;
+    } else {
+        error_log("Failed to move uploaded file to: " . $uploadPath);
+        return false;
     }
-    
-    return false;
 }
 
 function deleteImage($imagePath) {

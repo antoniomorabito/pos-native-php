@@ -80,9 +80,21 @@
                     
                     <div class="mb-3">
                         <label for="image" class="form-label">Product Image</label>
-                        <input type="file" class="form-control" id="image" name="image" 
-                               accept="image/jpeg,image/jpg,image/png,image/gif">
-                        <small class="text-muted">Allowed formats: JPG, JPEG, PNG, GIF. Max size: 2MB</small>
+                        <div class="image-upload-container" id="imageUploadContainer">
+                            <div class="upload-content" id="uploadContent">
+                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                <h5>Click to browse image</h5>
+                                <p class="text-muted">Allowed formats: JPG, JPEG, PNG, GIF. Max size: 2MB</p>
+                                <input type="file" class="form-control mt-3" id="image" name="image" 
+                                       accept="image/jpeg,image/jpg,image/png,image/gif" style="display: block !important;">
+                            </div>
+                            <div id="imagePreview" class="d-none">
+                                <img id="previewImg" class="image-preview" src="" alt="Preview">
+                                <button type="button" class="btn btn-danger btn-sm mt-2" id="removeImage">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="text-end">
@@ -111,6 +123,43 @@ $(document).ready(function() {
         } else {
             $('#selling_price').removeClass('is-invalid');
         }
+    });
+    
+    // Simple image preview functionality
+    $('#image').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Please select a valid image file (JPG, PNG, GIF)');
+                $(this).val('');
+                return;
+            }
+            
+            // Validate file size (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('File size must be less than 2MB');
+                $(this).val('');
+                return;
+            }
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#previewImg').attr('src', e.target.result);
+                $('#uploadContent').hide();
+                $('#imagePreview').removeClass('d-none');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Remove image
+    $('#removeImage').on('click', function() {
+        $('#image').val('');
+        $('#uploadContent').show();
+        $('#imagePreview').addClass('d-none');
     });
 });
 </script>
