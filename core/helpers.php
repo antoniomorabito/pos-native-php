@@ -127,7 +127,14 @@ function deleteImage($imagePath) {
 }
 
 function getDefaultProductImage() {
-    return 'assets/images/no-product.png';
+    return ASSET_URL . 'images/no-product.svg';
+}
+
+function getProductImageUrl($imagePath) {
+    if ($imagePath && file_exists(UPLOAD_PATH . $imagePath)) {
+        return UPLOAD_URL . $imagePath;
+    }
+    return getDefaultProductImage();
 }
 
 function validateBarcode($barcode) {

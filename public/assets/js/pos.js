@@ -174,6 +174,9 @@ class POSSystem {
         
         $('#btn-checkout').prop('disabled', false);
         this.calculateChange();
+        
+        // Trigger cart updated event
+        $(document).trigger('cartUpdated');
     }
     
     getSubtotal() {
@@ -277,7 +280,7 @@ class POSSystem {
         
         // Send to server
         $.ajax({
-            url: baseUrl + 'sales/checkout',
+            url: window.baseUrl + 'sales/checkout',
             method: 'POST',
             data: {
                 ...checkoutData,
@@ -299,7 +302,7 @@ class POSSystem {
                         cancelButtonText: 'Continue'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.open(baseUrl + 'sales/receipt/' + response.sale_id, '_blank');
+                            window.open(window.baseUrl + 'sales/receipt/' + response.sale_id, '_blank');
                         }
                     });
                     

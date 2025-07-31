@@ -29,12 +29,13 @@
                             <?php foreach ($products as $product): ?>
                             <tr>
                                 <td>
-                                    <?php if ($product['image']): ?>
+                                    <?php if ($product['image'] && file_exists(UPLOAD_PATH . $product['image'])): ?>
                                         <img src="<?= UPLOAD_URL . $product['image'] ?>" 
                                              alt="<?= htmlspecialchars($product['name']) ?>" 
-                                             class="product-image">
+                                             class="product-image"
+                                             onerror="this.src='<?= ASSET_URL ?>images/no-product.svg'">
                                     <?php else: ?>
-                                        <img src="<?= ASSET_URL . 'images/no-product.png' ?>" 
+                                        <img src="<?= ASSET_URL ?>images/no-product.svg" 
                                              alt="No image" 
                                              class="product-image">
                                     <?php endif; ?>

@@ -47,14 +47,15 @@
                                      'stock' => $product['stock']
                                  ]) ?>'>
                                 <div class="card-body text-center p-2">
-                                    <?php if ($product['image']): ?>
+                                    <?php if ($product['image'] && file_exists(UPLOAD_PATH . $product['image'])): ?>
                                         <img src="<?= UPLOAD_URL . $product['image'] ?>" 
                                              alt="<?= htmlspecialchars($product['name']) ?>" 
-                                             class="product-image-large mb-2">
+                                             class="product-image-large mb-2"
+                                             onerror="this.src='<?= ASSET_URL ?>images/no-product.svg'">
                                     <?php else: ?>
-                                        <div class="product-image-large bg-light d-flex align-items-center justify-content-center mb-2">
-                                            <i class="fas fa-box fa-3x text-muted"></i>
-                                        </div>
+                                        <img src="<?= ASSET_URL ?>images/no-product.svg" 
+                                             alt="<?= htmlspecialchars($product['name']) ?>" 
+                                             class="product-image-large mb-2">
                                     <?php endif; ?>
                                     <h6 class="mb-1"><?= htmlspecialchars($product['name']) ?></h6>
                                     <p class="text-primary mb-0 fw-bold"><?= formatCurrency($product['selling_price']) ?></p>
@@ -130,10 +131,14 @@
                     
                     <div class="mb-3" id="cash-payment">
                         <label class="form-label">Paid Amount</label>
-                        <input type="number" class="form-control" id="paid-amount" min="0">
+                        <input type="number" class="form-control" id="paid-amount" min="0" step="1000">
                         <div class="mt-2">
                             <span>Change: </span>
-                            <span id="change-amount" class="fw-bold">Rp 0</span>
+                            <span id="change-amount" class="fw-bold text-success">Rp 0</span>
+                        </div>
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary me-1" onclick="setExactAmount()">Exact</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary me-1" onclick="setRoundAmount()">Round Up</button>
                         </div>
                     </div>
                     
@@ -147,6 +152,28 @@
 </div>
 
 <!-- POS JavaScript -->
+<script>
+// Helper functions for payment
+function setExactAmount() {
+    const total = window.pos.getTotal();
+    $('#paid-amount').val(total);
+    window.pos.calculateChange();
+}
+
+function setRoundAmount() {
+    const total = window.pos.getTotal();
+    const rounded = Math.ceil(total / 1000) * 1000;
+    $('#paid-amount').val(rounded);
+    window.pos.calculateChange();
+}
+
+// Auto-set paid amount when total changes
+$(document).on('cartUpdated', function() {
+    if ($('#payment-method').val() === 'cash') {
+        setExactAmount();
+    }
+});
+</script>
 <script src="<?= ASSET_URL ?>js/pos.js"></script>
 
 <?php require_once VIEW_PATH . 'layouts/footer.php'; ?>
