@@ -102,7 +102,7 @@
                                 <small class="user-role text-light opacity-75"><?= ucfirst($_SESSION['user_role']) ?></small>
                             </div>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="min-width: 200px;">
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg">
                             <li>
                                 <div class="dropdown-header">
                                     <strong><?= $_SESSION['full_name'] ?></strong>
@@ -122,7 +122,7 @@
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item text-danger" href="<?= BASE_URL ?>auth/logout">
+                                <a class="dropdown-item text-danger" href="<?= BASE_URL ?>auth/logout" onclick="return confirm('Are you sure you want to logout?')">
                                     <i class="fas fa-sign-out-alt me-2"></i> Logout
                                 </a>
                             </li>

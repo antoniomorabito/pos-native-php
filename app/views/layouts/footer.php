@@ -44,6 +44,9 @@
             $('.select2').select2({
                 theme: 'bootstrap-5'
             });
+            
+            // Let Bootstrap handle dropdowns normally
+            // No custom dropdown handling needed
         });
     </script>
 </body>
